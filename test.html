@@ -1,33 +1,45 @@
 <script>
-  // First, let's get a reference to the body element
-var body = document.querySelector('body');
+  // get the body element
+var body = document.body;
 
-// Next, let's create a function that fades the background to black
-function fadeToBlack() {
-  // Set the initial background color to white
-  body.style.backgroundColor = 'white';
+// set the initial background color (if desired)
+body.style.backgroundColor = 'white';
 
-  // Get the current time in milliseconds
-  var start = Date.now();
+// set the target background color
+var targetColor = 'black';
 
-  // Start an interval that runs every 10 milliseconds
-  var timer = setInterval(function() {
-    // Calculate the elapsed time in seconds
-    var elapsed = (Date.now() - start) / 1000;
+// function to update the background color
+function updateBodyBgColor(percentage) {
+  // calculate the new red, green, and blue values
+  var newColor = 'rgb(' +
+    Math.round(255 - (percentage * (255 - 0))) + ',' +
+    Math.round(255 - (percentage * (255 - 0))) + ',' +
+    Math.round(255 - (percentage * (255 - 0))) + ')';
+  // update the body's background color
+  body.style.backgroundColor = newColor;
+}
 
-    // Calculate the new background color using the elapsed time
-    var newBackgroundColor = 'rgb(0, 0, ' + (elapsed * 255) + ')';
-
-    // Update the background color
-    body.style.backgroundColor = newBackgroundColor;
-
-    // If the elapsed time is greater than 1 second, stop the interval
-    if (elapsed > 1) {
-      clearInterval(timer);
+// function to perform the fade
+function fadeToColor(duration) {
+  // get the current time
+  var start = new Date().getTime();
+  // loop until the duration has passed
+  var intervalId = setInterval(function() {
+    // get the time passed
+    var timePassed = new Date().getTime() - start;
+    // calculate the percentage of time passed
+    var percentage = timePassed / duration;
+    // if the duration has passed, stop the loop
+    if (percentage >= 1) {
+      clearInterval(intervalId);
+      return;
     }
+    // update the body's background color
+    updateBodyBgColor(percentage);
   }, 10);
 }
 
-// Finally, let's call the fadeToBlack function when the page loads
-window.onload = fadeToBlack;
+// fade the body's background color to black over a duration of 5000ms (5 seconds)
+fadeToColor(5000);
+
 </script>
